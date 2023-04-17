@@ -4,33 +4,52 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+   
+ /*
+    public GameObject heroPrefab;
+    public GameObject enemyPrefab;
 
-   /* public GameObject heroPrefab;
-    public ScoreManager scoreText;
+    public static Player Instance;
 
-    private GameObject[,] powerUps;
+
+    private bool ifPLayerTurn = false;
     private GameObject hero;
+    private GameObject enemy;
+    private GameObject unit;
 
     
-    
-   public Player(GameObject[,] powerUps)
-    {
-        this.powerUps = powerUps;
-    }
 
-    private void Start()
+    private void Awake()
     {
         hero = Instantiate(heroPrefab, new Vector3(0, 0, -1f), Quaternion.identity);
+        enemy = Instantiate(enemyPrefab, new Vector3(16, 0, -1f), Quaternion.Euler(0, 160, 0));
+
+        GameManager.Instance.OnStateChange += IfGameStateChanged;
+        Instance = this;
        
+
     }
-    void Update()
+   
+    private void OnDestroy()
     {
+        GameManager.Instance.OnStateChange -= IfGameStateChanged;
 
-        EndGame();
+    }
+    private void IfGameStateChanged(GameState State)
+    {
+        unit = State == GameState.PlayerTurn ? hero : enemy;
 
+        ifPLayerTurn = State == GameState.PlayerTurn;
+    }
+
+
+    public void UnitTurn(GameState state)
+    {
+       
 
         if (Input.GetMouseButtonDown(0))
         {
+            
 
             Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
@@ -38,6 +57,8 @@ public class Player : MonoBehaviour
 
             int row = Mathf.RoundToInt(hit.collider.gameObject.transform.position.y - transform.position.y);
             int col = Mathf.RoundToInt(hit.collider.gameObject.transform.position.x - transform.position.x);
+
+            
 
             // Check if the ray intersects with a square GameObject
             if (hit.collider != null && hit.collider.gameObject.tag == "Player")
@@ -63,59 +84,39 @@ public class Player : MonoBehaviour
                         // Remove the power-up GameObject from the grid
                         RemovePowerUp(row, col);
 
+
                         // Activate the power-up effect
-                        scoreText.IncreaseScore(3);
+                        ScoreManager.instance.IncreaseScore(3);
 
 
                     }
+
+
+                    GameManager.Instance.UpdateState(state);
+
                 }
 
+
             }
 
 
         }
-
-
-
     }
 
-    void EndGame()
+    private void Update()
     {
-        if (powerUps.Length == 0 || powerUps == null)
-        {
-            Debug.Log("No coins");
-        }
+        UnitTurn(ifPLayerTurn ? GameState.EnemyTurn : GameState.PlayerTurn);
+        
     }
-
-    bool ClickedOnSquare()
-    {
-        // Check if the left mouse button is clicked
-        if (Input.GetMouseButtonDown(0))
-        {
-
-            // Create a ray from the camera through the mouse position
-            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
-
-            // Check if the ray intersects with a square GameObject
-            if (hit.collider != null && hit.collider.gameObject.tag == "Player")
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
 
     bool IsNearToHero(int row, int col)
     {
         // Check if the hero GameObject exists
-        if (hero != null)
+        if (unit != null)
         {
             // Get the row and column of the hero GameObject
-            int heroRow = Mathf.RoundToInt(hero.transform.position.y - transform.position.y);
-            int heroCol = Mathf.RoundToInt(hero.transform.position.x - transform.position.x);
+            int heroRow = Mathf.RoundToInt(unit.transform.position.y - transform.position.y);
+            int heroCol = Mathf.RoundToInt(unit.transform.position.x - transform.position.x);
 
             // Check if the clicked square is adjacent to the hero GameObject
             if ((Mathf.Abs(row - heroRow) <= 2 && col == heroCol) || (Mathf.Abs(col - heroCol) <= 2 && row == heroRow))
@@ -130,18 +131,16 @@ public class Player : MonoBehaviour
     void MoveHero(int row, int col)
     {
         // Calculate the position for the hero based on the row, column, and fixed size of each square
-        Vector3 heroPosition = new Vector3(col , row , -1f);
+        Vector3 heroPosition = new Vector3(col, row, -1f);
 
-        // Move the hero GameObject to the clicked square
-        hero.transform.position = heroPosition;
+        unit.transform.position = heroPosition;
+
     }
 
-
-
-    bool HasPowerUp(int row, int col)
+    public bool HasPowerUp(int row, int col)
     {
         // Check if the clicked square has a power-up GameObject
-        if (powerUps[row, col] != null)
+        if (GoldManger.Instance.powerUps[row, col] != null)
         {
             return true;
         }
@@ -149,12 +148,12 @@ public class Player : MonoBehaviour
         return false;
     }
 
-    void RemovePowerUp(int row, int col)
+    public void RemovePowerUp(int row, int col)
     {
         // Remove the power-up GameObject from the grid and destroy it
-        Destroy(powerUps[row, col]);
-
+        Destroy(GoldManger.Instance.powerUps[row, col]);
 
     }
-   */
+ */
+  
 }

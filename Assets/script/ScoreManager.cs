@@ -105,12 +105,14 @@ private void Start()
     // метод для обновления отображения счета в текстовом поле
     private void UpdateScoreText()
     {
-        scoreText.text = "Score: " + score.ToString() +" ml";
+        scoreText.text = "Score: " + score.ToString();
     }
 
     void EndGame()
     {
         gameEnded = true;
+        
+        GameManager.Instance.UpdateState(scoreEnemy < scorePlayer ? GameState.VictoryScreen : GameState.LoseScreen);
     }
 
 }

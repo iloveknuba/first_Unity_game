@@ -1,49 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GoldManger : MonoBehaviour
 {
-   /* public GameObject powerUpPrefab;
-    private GameObject[,] powerUps;
-   
-   
+    public static GoldManger Instance;
+    
+    public GameObject powerUpPrefab;
 
-    public NewBehaviourScript fromGrid;
-    public void CreateGold(Vector3 vec, int row, int col)
+    public GameObject[,] powerUps;
+
+    private void Awake()
     {
-            
-        // Add a power-up to some of the squares
-        if (Random.Range(0f, 1f) < 0.1f)
-        {
-            Vector3 powerUpPosition = new Vector3(vec.x, vec.y, -1f);
-            powerUps[row, col] = Instantiate(powerUpPrefab, powerUpPosition, Quaternion.identity);
-            powerUps[row, col].name = $"Coin {col} : {row}";
-        }
+        Instance = this; 
     }
     private void Start()
     {
-        powerUps = new GameObject[fromGrid.numCols, fromGrid.numRows];
+       powerUps = new GameObject[9,17];
+       refreshCoins();
+    }
+    private void Update()
+    {
+        refreshCoins();
+    }
+    public void refreshCoins()
+    {
+        var gold = GameObject.FindGameObjectsWithTag("Gold");
+        var squares = GameObject.FindGameObjectsWithTag("Player");
+
        
-    }
-    public bool HasPowerUp(int row, int col)
-    {
-        // Check if the clicked square has a power-up GameObject
-        if (powerUps[row, col] != null)
+
+        if (gold.Length == 0)
         {
-            return true;
+            foreach (var square in squares)
+            {
+                var row = (int)square.transform.position.y;
+                var col = (int)square.transform.position.x;
+
+                if (row % 2 != 0 && col % 2 != 0 && col > 1 && col < 15)
+                {
+                    if (Random.value < 0.15f)
+                    {
+                        
+                        Vector3 powerUpPosition = new Vector3(col, row, -1f);
+                        powerUps[row, col] = Instantiate(powerUpPrefab, powerUpPosition, Quaternion.identity);
+                        powerUps[row, col].name = $"Coin {col} : {row}";
+
+                    }
+                }
+
+            }
         }
-
-        return false;
     }
-
-   public  void RemovePowerUp(int row, int col)
-    {
-        // Remove the power-up GameObject from the grid and destroy it
-        Destroy(powerUps[row, col]);
-
-
-    }
-
-    */
 }
