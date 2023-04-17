@@ -9,6 +9,8 @@ public class GoldManger : MonoBehaviour
     
     public GameObject powerUpPrefab;
 
+    public float spawnChance = 0.6f;
+
     public GameObject[,] powerUps;
 
     private void Awake()
@@ -17,12 +19,17 @@ public class GoldManger : MonoBehaviour
     }
     private void Start()
     {
-       powerUps = new GameObject[9,17];
+       powerUps = new GameObject[Grid.Instance.numRows,Grid.Instance.numCols];
        refreshCoins();
     }
     private void Update()
     {
         refreshCoins();
+    }
+
+    bool goldSpawnedAtUnitSquare(Vector3 goldPosition)
+    {
+        return Player.Instance.hero.transform.position == goldPosition || Player.Instance.enemy.transform.position == goldPosition;
     }
     public void refreshCoins()
     {
@@ -38,12 +45,12 @@ public class GoldManger : MonoBehaviour
                 var row = (int)square.transform.position.y;
                 var col = (int)square.transform.position.x;
 
-                if (row % 2 != 0 && col % 2 != 0 && col > 1 && col < 15)
+                Vector3 powerUpPosition = new Vector3(col, row, -1f);
+                if (row % 2 != 0 && col % 2 != 0 && col > 1 && col < 15 && !goldSpawnedAtUnitSquare(powerUpPosition))
                 {
-                    if (Random.value < 0.15f)
+                    if (Random.value < spawnChance)
                     {
-                        
-                        Vector3 powerUpPosition = new Vector3(col, row, -1f);
+                                               
                         powerUps[row, col] = Instantiate(powerUpPrefab, powerUpPosition, Quaternion.identity);
                         powerUps[row, col].name = $"Coin {col} : {row}";
 
