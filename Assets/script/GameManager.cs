@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public GameState state;
-
+   
     public event Action<GameState> OnStateChange;
     void Awake()
     {
@@ -29,10 +29,7 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.EnemyTurn:
                 HandleEnemyTurn();
-                break;
-            case GameState.Decide:
-                HandleDecide();
-                break;
+                break;         
             case GameState.VictoryScreen:
                 break;
             case GameState.LoseScreen:
@@ -40,25 +37,22 @@ public class GameManager : MonoBehaviour
         }
 
         OnStateChange?.Invoke(state);
-    }
-
-    private void HandleDecide()
-    {
-
-
         
     }
 
+   
+
     private  void HandleEnemyTurn()
     {
+        ScoreManager.instance.currentStateText.text = "Enemy Turn";
        
     }
 
     private  void HandlePlayerTurn()
     {
-       
 
-       
+        ScoreManager.instance.currentStateText.text = "Your Turn";
+
     }
 }
 
@@ -66,7 +60,6 @@ public enum GameState
 {
     PlayerTurn,
     EnemyTurn,
-    Decide,
     VictoryScreen,
     LoseScreen
 }

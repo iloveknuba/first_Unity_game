@@ -7,11 +7,11 @@ public class GoldManger : MonoBehaviour
 {
     public static GoldManger Instance;
     
-    public GameObject powerUpPrefab;
+    public GameObject goldPrefab;
 
     public float spawnChance = 0.6f;
 
-    public GameObject[,] powerUps;
+    public GameObject[,] goldArray;
 
     private void Awake()
     {
@@ -19,7 +19,7 @@ public class GoldManger : MonoBehaviour
     }
     private void Start()
     {
-       powerUps = new GameObject[Grid.Instance.numRows,Grid.Instance.numCols];
+       goldArray = new GameObject[Grid.Instance.numRows,Grid.Instance.numCols];
        refreshCoins();
     }
     private void Update()
@@ -51,8 +51,8 @@ public class GoldManger : MonoBehaviour
                     if (Random.value < spawnChance)
                     {
                                                
-                        powerUps[row, col] = Instantiate(powerUpPrefab, powerUpPosition, Quaternion.identity);
-                        powerUps[row, col].name = $"Coin {col} : {row}";
+                        goldArray[row, col] = Instantiate(goldPrefab, powerUpPosition, Quaternion.identity);
+                        goldArray[row, col].name = $"Coin {col} : {row}";
 
                     }
                 }

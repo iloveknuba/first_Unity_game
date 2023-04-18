@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.TextCore.Text;
+using System.Threading.Tasks;
 
 public class Player : MonoBehaviour
 {
@@ -18,8 +19,8 @@ public class Player : MonoBehaviour
     public static Player Instance;
    
     private bool ifPLayerTurn= false;
-   
-    
+
+    public bool heroMoved =false;
 
     public GameObject hero;
    public GameObject enemy;
@@ -59,7 +60,7 @@ public class Player : MonoBehaviour
 
     }
 
-    public void UnitTurn(GameState state)
+    public async void UnitTurn(GameState state)
     {
         
 
@@ -91,12 +92,17 @@ public class Player : MonoBehaviour
                         ScoreManager.instance.IncreaseScore(3);
                
                     }
+                    
+                    await Task.Delay(10);
 
-                    GameManager.Instance.UpdateState(state);                                          
+                    GameManager.Instance.UpdateState(state);
+                    heroMoved = false;
+                   
                 }
 
             }
- 
+           
+
         }
     }
 
@@ -131,12 +137,13 @@ public class Player : MonoBehaviour
 
         unit.transform.position = heroPosition;
 
+        heroMoved = true;
     }
 
     public bool HasPowerUp(int row, int col)
     {
        
-        if (GoldManger.Instance.powerUps[row, col] != null)
+        if (GoldManger.Instance.goldArray[row, col] != null)
         {
             return true;
         }
@@ -147,7 +154,7 @@ public class Player : MonoBehaviour
     public void RemovePowerUp(int row, int col)
     {
        
-        Destroy(GoldManger.Instance.powerUps[row, col]);
+        Destroy(GoldManger.Instance.goldArray[row, col]);
 
     }
 

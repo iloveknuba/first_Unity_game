@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,17 +10,23 @@ public class ScoreManager : MonoBehaviour
     public TextMeshProUGUI playerScoreText;
     public TextMeshProUGUI enemyScoreText;
     public TextMeshProUGUI timerText;
+    public TextMeshProUGUI currentStateText;
 
 
 
-    private float gameDuration = 300f;
-    private float moveDelay = 10.0f; // затримка між рухами об'єктів
+    public float gameDuration = 300f;
+    public float moveDelay = 10.0f;
+
+   
     private bool gameEnded  = false;
     private float timer;
+    private float moveTime;
 
 
     private bool ifPlayerTurn = false;
-    private TextMeshProUGUI scoreText;// ссылка на текстовое поле, отображающее счет
+    
+
+    private TextMeshProUGUI scoreText;
     private int scorePlayer;
     private int scoreEnemy;
     private int score;
@@ -45,22 +52,25 @@ public class ScoreManager : MonoBehaviour
         ifPlayerTurn = state == GameState.PlayerTurn ? true : false;
 
     }
-// переменная для хранения текущего счета
+
     
-private void Start()
+    private void Start()
     {
+        
         scorePlayer = 0;
         scoreEnemy = 0;
         timer = gameDuration;
+        moveTime = Time.time;
+       
     }
     private void Update()
     {
-
-        timeManager(ifPlayerTurn ? GameState.EnemyTurn : GameState.PlayerTurn);
-        
+       
+        timeManager();
+        checkDelay(ifPlayerTurn ? GameState.EnemyTurn : GameState.PlayerTurn);
     }
 
-    void timeManager(GameState state)
+    void timeManager()
     {
         if (!gameEnded)
         {
@@ -71,12 +81,30 @@ private void Start()
             {
                 EndGame();
             }
-            else if (timer % moveDelay < Time.deltaTime)
-            {
-                GameManager.Instance.UpdateState(state);
-            }
+            
         }
     }
+
+    void checkDelay(GameState state)
+    {
+        
+        if (Player.Instance.heroMoved)
+        {
+           moveTime = Time.time;
+
+           
+        }
+        if (Time.time - moveTime > moveDelay)
+        {
+            Player.Instance.heroMoved = true;
+            GameManager.Instance.UpdateState(state);
+            moveTime = Time.time;
+        }
+
+        Player.Instance.heroMoved = false;
+
+    }
+    
     void UpdateTimerText()
     {
         int minutes = Mathf.FloorToInt(timer / 60.0f);
@@ -84,7 +112,7 @@ private void Start()
         timerText.text = string.Format("{0:0}:{1:00}", minutes, seconds);
     }
 
-    // метод для увеличения счета на заданное значение
+    
     public void IncreaseScore(int value)
     {
 
@@ -102,7 +130,7 @@ private void Start()
         UpdateScoreText();
     }
 
-    // метод для обновления отображения счета в текстовом поле
+   
     private void UpdateScoreText()
     {
         scoreText.text = "Score: " + score.ToString();

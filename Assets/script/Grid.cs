@@ -30,12 +30,11 @@ public class Grid : MonoBehaviour
     }
     void CreateGrid()
     {
-        // Create the grid of squares
         for (int row = 0; row < numRows; row++)
         {
             for (int col = 0; col < numCols; col++)
             {
-                var isOffset = (row % 2 == 0 && col % 2 == 0 && col != 0 && col != 16);
+                var isOffset = (row % 2 == 0 && col % 2 == 0 && col > 1 && col < 15);
                 Vector3 squarePosition = new(col, row, 0f);
                 squarePrefab = isOffset ? mountainPrefab : grassPrefab;
                 squares[row, col] = Instantiate(squarePrefab, squarePosition, Quaternion.identity);
