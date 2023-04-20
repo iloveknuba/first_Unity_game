@@ -908,6 +908,7 @@ MonoBehaviour:
   currentStateText: {fileID: 258975889}
   gameDuration: 300
   moveDelay: 10
+  delayNobodyMoved: 0
 --- !u!1 &1011910904
 GameObject:
   m_ObjectHideFlags: 0
@@ -1073,13 +1074,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43b37cc0d349cae44bd40f9874557426, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heroes:
+  units:
   - {fileID: 1131782733630872104, guid: 3c0f3f585d88ecc429087c833276168d, type: 3}
-  enemies:
-  - {fileID: 3160462518342849155, guid: 820eb8d3254b5684b918d01f3eb15769, type: 3}
   heroMoved: 0
-  hero: {fileID: 0}
-  enemy: {fileID: 0}
+  hero: []
+  enemy: []
   unit: {fileID: 0}
 --- !u!224 &1252022989
 RectTransform:

@@ -17,6 +17,8 @@ public class ScoreManager : MonoBehaviour
     public float gameDuration = 300f;
     public float moveDelay = 10.0f;
 
+    public bool delayNobodyMoved = false;
+
    
     private bool gameEnded  = false;
     private float timer;
@@ -96,13 +98,15 @@ public class ScoreManager : MonoBehaviour
         }
         if (Time.time - moveTime > moveDelay)
         {
+            delayNobodyMoved = true;
             Player.Instance.heroMoved = true;
             GameManager.Instance.UpdateState(state);
             moveTime = Time.time;
+            
         }
 
         Player.Instance.heroMoved = false;
-
+        delayNobodyMoved = false;
     }
     
     void UpdateTimerText()

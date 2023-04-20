@@ -10,11 +10,13 @@ public class Player : MonoBehaviour
 {
    
   
-    public List<GameObject> heroes;
-    public List<GameObject> enemies;
+    public List<GameObject> units;
 
 
+    private int currentHeroIndex = 3;
+    private int currentEnemyIndex = 3;
 
+  
 
     public static Player Instance;
    
@@ -22,8 +24,8 @@ public class Player : MonoBehaviour
 
     public bool heroMoved =false;
 
-    public GameObject hero;
-   public GameObject enemy;
+    public List<GameObject> hero;
+   public List<GameObject> enemy;
     public GameObject unit;
   
 
@@ -34,12 +36,33 @@ public class Player : MonoBehaviour
        
        GameManager.Instance.OnStateChange += IfGameStateChanged;
         Instance = this;
-        hero = Instantiate(heroes[0], new Vector3(0, 3, -1f), Quaternion.identity);
         
-        enemy = Instantiate(enemies[0], new Vector3(16, 3, -1f), Quaternion.Euler(0, 160, 0));
-
     }
-   
+    private void Start()
+    {
+        spawnUnits();
+
+        //hero = Instantiate(units[0], new Vector3(0, 2, -1f), Quaternion.identity);
+        //enemy = Instantiate(units[0], new Vector3(16, 2, -1f), Quaternion.Euler(0, 160, 0));
+    }
+
+    void spawnUnits()
+    {
+        for(int i = 0; i < currentHeroIndex; i++)
+        {
+            hero.Add(Instantiate(units[0], new Vector3(0, i, -1f), Quaternion.identity));
+           
+            hero[i].name = $"hero {i}";
+        }
+
+        for (int i = 0; i < currentEnemyIndex; i++)
+        {
+            enemy.Add(Instantiate(units[0], new Vector3(16, i, -1f), Quaternion.Euler(0, 160, 0)));
+            enemy[i].name = $"enemy {i}";
+        }
+    }
+
+ 
     private void OnDestroy()
     {
         GameManager.Instance.OnStateChange -= IfGameStateChanged;
@@ -47,15 +70,13 @@ public class Player : MonoBehaviour
     }
 
     private void IfGameStateChanged(GameState State)
-    {
-       unit = State == GameState.PlayerTurn ? hero : enemy;
-
+    {      
         ifPLayerTurn = State == GameState.PlayerTurn;
     }
 
     private void Update()
     {
-
+        
         UnitTurn(ifPLayerTurn ? GameState.EnemyTurn : GameState.PlayerTurn);
 
     }
@@ -66,15 +87,33 @@ public class Player : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+
            
             Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
 
 
+
             int row = Mathf.RoundToInt(hit.collider.gameObject.transform.position.y - transform.position.y);
             int col = Mathf.RoundToInt(hit.collider.gameObject.transform.position.x - transform.position.x);
+            for (int i = 0; i < hero.Count; i++)
+            {
+                if (hit.collider.gameObject == hero[i] && ifPLayerTurn)
+                {
+                    unit = hero[i];
+                    Debug.Log($"Hero {i} choosen");
 
-           
+                }
+            }
+            for (int i = 0; i < enemy.Count; i++)
+            {
+                if (hit.collider.gameObject == enemy[i] && !ifPLayerTurn)
+                {
+                    unit = enemy[i];
+                    Debug.Log($"enemy {i} choosen");
+
+                }
+            }
             if (hit.collider != null && hit.collider.gameObject.tag == "Player")
             {
 
@@ -106,9 +145,6 @@ public class Player : MonoBehaviour
         }
     }
 
-   
-
-   
 
 
     bool IsNearToHero(int row, int col)
