@@ -8,24 +8,23 @@ using System.Threading.Tasks;
 
 public class Player : MonoBehaviour
 {
-   
-  
-    public List<GameObject> units;
+    public GameObject heroPrefab;
+    public GameObject enemyPrefab;
+
+    public int heroesAmount = 3;
+    public int enemiesAmount = 3;
+    public int reward = 3;
 
 
-    private int currentHeroIndex = 3;
-    private int currentEnemyIndex = 3;
-
-  
+    public bool heroMoved = false;
 
     public static Player Instance;
    
-    private bool ifPLayerTurn= false;
+    public bool ifPLayerTurn= false;
 
-    public bool heroMoved =false;
 
-    public List<GameObject> hero;
-   public List<GameObject> enemy;
+    public List<GameObject> heroes;
+   public List<GameObject> enemies;
     public GameObject unit;
   
 
@@ -36,29 +35,25 @@ public class Player : MonoBehaviour
        
        GameManager.Instance.OnStateChange += IfGameStateChanged;
         Instance = this;
+        spawnUnits();
         
     }
-    private void Start()
-    {
-        spawnUnits();
-
-        //hero = Instantiate(units[0], new Vector3(0, 2, -1f), Quaternion.identity);
-        //enemy = Instantiate(units[0], new Vector3(16, 2, -1f), Quaternion.Euler(0, 160, 0));
-    }
-
+   
     void spawnUnits()
     {
-        for(int i = 0; i < currentHeroIndex; i++)
+       
+        for(int i = 0; i < heroesAmount; i++)
         {
-            hero.Add(Instantiate(units[0], new Vector3(0, i, -1f), Quaternion.identity));
-           
-            hero[i].name = $"hero {i}";
+            heroes.Add(Instantiate(heroPrefab, new Vector3(2, 5, -1f), Quaternion.identity));
+            
+            heroes[i].name = $"hero {i}";
         }
 
-        for (int i = 0; i < currentEnemyIndex; i++)
+        for (int i = 0; i < enemiesAmount; i++)
         {
-            enemy.Add(Instantiate(units[0], new Vector3(16, i, -1f), Quaternion.Euler(0, 160, 0)));
-            enemy[i].name = $"enemy {i}";
+            enemies.Add(Instantiate(enemyPrefab, new Vector3(16, 5, -1f), Quaternion.Euler(0, 160, 0)));
+           
+            enemies[i].name = $"enemy {i}";
         }
     }
 
@@ -72,6 +67,7 @@ public class Player : MonoBehaviour
     private void IfGameStateChanged(GameState State)
     {      
         ifPLayerTurn = State == GameState.PlayerTurn;
+        unit = ifPLayerTurn ? heroes[0] : enemies[0];
     }
 
     private void Update()
@@ -81,9 +77,10 @@ public class Player : MonoBehaviour
 
     }
 
+
     public async void UnitTurn(GameState state)
     {
-        
+       
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -96,25 +93,31 @@ public class Player : MonoBehaviour
 
             int row = Mathf.RoundToInt(hit.collider.gameObject.transform.position.y - transform.position.y);
             int col = Mathf.RoundToInt(hit.collider.gameObject.transform.position.x - transform.position.x);
-            for (int i = 0; i < hero.Count; i++)
+
+            for (int i = 0; i < heroes.Count; i++)
             {
-                if (hit.collider.gameObject == hero[i] && ifPLayerTurn)
+                if (hit.collider.gameObject == heroes[i] && ifPLayerTurn)
                 {
-                    unit = hero[i];
+                   
+                    unit = heroes[i];
                     Debug.Log($"Hero {i} choosen");
-
+                   
+                   
                 }
+              
             }
-            for (int i = 0; i < enemy.Count; i++)
+            for (int i = 0; i < enemies.Count; i++)
             {
-                if (hit.collider.gameObject == enemy[i] && !ifPLayerTurn)
+                if (hit.collider.gameObject == enemies[i] && !ifPLayerTurn)
                 {
-                    unit = enemy[i];
-                    Debug.Log($"enemy {i} choosen");
-
+                    
+                     unit = enemies[i];
+                     Debug.Log($"enemy {i} choosen");
+                   
                 }
+               
             }
-            if (hit.collider != null && hit.collider.gameObject.tag == "Player")
+            if (hit.collider.gameObject.tag == "Player")
             {
 
                 Debug.Log($"Coordinates of clicked square: {row}{col}");
@@ -128,12 +131,11 @@ public class Player : MonoBehaviour
                   
                         RemovePowerUp(row, col);
                   
-                        ScoreManager.instance.IncreaseScore(3);
+                        ScoreManager.instance.IncreaseScore(reward);
                
                     }
-                    
-                    await Task.Delay(10);
 
+                    await Task.Delay(10);
                     GameManager.Instance.UpdateState(state);
                     heroMoved = false;
                    
@@ -147,7 +149,7 @@ public class Player : MonoBehaviour
 
 
 
-    bool IsNearToHero(int row, int col)
+   public bool IsNearToHero(int row, int col)
     {
         
         if (unit != null)

@@ -12,12 +12,12 @@ public class ScoreManager : MonoBehaviour
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI currentStateText;
 
-
+   
 
     public float gameDuration = 300f;
     public float moveDelay = 10.0f;
 
-    public bool delayNobodyMoved = false;
+   
 
    
     private bool gameEnded  = false;
@@ -25,7 +25,7 @@ public class ScoreManager : MonoBehaviour
     private float moveTime;
 
 
-    private bool ifPlayerTurn = false;
+   
     
 
     private TextMeshProUGUI scoreText;
@@ -48,10 +48,8 @@ public class ScoreManager : MonoBehaviour
 
     private void SubscribeGameState(GameState state)
     {
-        scoreText = state == GameState.PlayerTurn ? playerScoreText : enemyScoreText;
-        score = state == GameState.PlayerTurn ? scorePlayer : scoreEnemy;
-
-        ifPlayerTurn = state == GameState.PlayerTurn ? true : false;
+        scoreText = Player.Instance.ifPLayerTurn ? enemyScoreText : playerScoreText;
+        score = Player.Instance.ifPLayerTurn ? scoreEnemy : scorePlayer;
 
     }
 
@@ -69,7 +67,22 @@ public class ScoreManager : MonoBehaviour
     {
        
         timeManager();
-        checkDelay(ifPlayerTurn ? GameState.EnemyTurn : GameState.PlayerTurn);
+        checkDelay(Player.Instance.ifPLayerTurn ? GameState.EnemyTurn : GameState.PlayerTurn);
+    }
+
+    public void BuyUnit(int price)
+    {
+        if(scorePlayer >= price)
+        {
+            Player.Instance.heroes.Add(Instantiate(Player.Instance.heroPrefab, new Vector3(2, 5, -1f), Quaternion.identity));
+            scorePlayer -= price;
+            playerScoreText.text =  "Score: " + scorePlayer.ToString();
+        }
+        else
+        {
+            Debug.Log("Not enough coins");
+        }
+       
     }
 
     void timeManager()
@@ -98,7 +111,7 @@ public class ScoreManager : MonoBehaviour
         }
         if (Time.time - moveTime > moveDelay)
         {
-            delayNobodyMoved = true;
+            
             Player.Instance.heroMoved = true;
             GameManager.Instance.UpdateState(state);
             moveTime = Time.time;
@@ -106,7 +119,7 @@ public class ScoreManager : MonoBehaviour
         }
 
         Player.Instance.heroMoved = false;
-        delayNobodyMoved = false;
+       
     }
     
     void UpdateTimerText()
@@ -135,7 +148,7 @@ public class ScoreManager : MonoBehaviour
     }
 
    
-    private void UpdateScoreText()
+    public void UpdateScoreText()
     {
         scoreText.text = "Score: " + score.ToString();
     }

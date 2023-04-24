@@ -10,7 +10,7 @@ public class Grid : MonoBehaviour
     public int numRows = 9;
     public int numCols = 16;
 
-    public new Transform camera;
+    
 
     private Square squarePrefab;
     private Square[,] squares;
@@ -24,9 +24,7 @@ public class Grid : MonoBehaviour
         squares = new Square[numRows, numCols];
 
         CreateGrid();
-
-
-        camera.transform.position = new Vector3((float)numRows / 1.125f, (float)numCols / 2.7f - 2.3f, -10);
+     
     }
     void CreateGrid()
     {
@@ -34,7 +32,7 @@ public class Grid : MonoBehaviour
         {
             for (int col = 0; col < numCols; col++)
             {
-                var isOffset = (row % 2 == 0 && col % 2 == 0 && col > 1 && col < 15);
+                var isOffset = (row % 2 == 0 && col % 2 == 0 && col > 3 && col < 15);
                 Vector3 squarePosition = new(col, row, 0f);
                 squarePrefab = isOffset ? mountainPrefab : grassPrefab;
                 squares[row, col] = Instantiate(squarePrefab, squarePosition, Quaternion.identity);
