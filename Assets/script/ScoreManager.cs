@@ -61,6 +61,7 @@ public class ScoreManager : MonoBehaviour
         scoreEnemy = 0;
         timer = gameDuration;
         moveTime = Time.time;
+        UpdateScoreText();
        
     }
     private void Update()
@@ -70,13 +71,13 @@ public class ScoreManager : MonoBehaviour
         checkDelay(Player.Instance.ifPLayerTurn ? GameState.EnemyTurn : GameState.PlayerTurn);
     }
 
-    public void BuyUnit(int price)
+    public void BuyHero(int price)
     {
         if(scorePlayer >= price)
         {
             Player.Instance.heroes.Add(Instantiate(Player.Instance.heroPrefab, new Vector3(2, 5, -1f), Quaternion.identity));
             scorePlayer -= price;
-            playerScoreText.text =  "Score: " + scorePlayer.ToString();
+            playerScoreText.text =  "Coins: " + scorePlayer.ToString();
         }
         else
         {
@@ -84,13 +85,27 @@ public class ScoreManager : MonoBehaviour
         }
        
     }
+    public void BuyEnemy(int price)
+    {
+        if (scoreEnemy >= price)
+        {
+            Player.Instance.enemies.Add(Instantiate(Player.Instance.enemyPrefab, new Vector3(16, 5, -1f), Quaternion.Euler(0, 160, 0)));
+            scoreEnemy -= price;
+            enemyScoreText.text = "Coins: " + scoreEnemy.ToString();
+        }
+        else
+        {
+            Debug.Log("Not enough coins");
+        }
+
+    }
 
     void timeManager()
     {
         if (!gameEnded)
         {
             timer -= Time.deltaTime;
-            UpdateTimerText();
+            UpdateTimerText(timerText);
 
             if (timer <= 0)
             {
@@ -122,7 +137,7 @@ public class ScoreManager : MonoBehaviour
        
     }
     
-    void UpdateTimerText()
+    void UpdateTimerText(TextMeshProUGUI timerText)
     {
         int minutes = Mathf.FloorToInt(timer / 60.0f);
         int seconds = Mathf.FloorToInt(timer % 60.0f);
@@ -150,7 +165,7 @@ public class ScoreManager : MonoBehaviour
    
     public void UpdateScoreText()
     {
-        scoreText.text = "Score: " + score.ToString();
+        scoreText.text = "Coins: " + score.ToString();
     }
 
     void EndGame()

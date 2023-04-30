@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 364432980168242683}
   - component: {fileID: 8772879619302271958}
   - component: {fileID: 8861960164337111639}
+  - component: {fileID: 6192095712960915253}
   m_Layer: 0
   m_Name: heroGnome
   m_TagString: Unit
@@ -32,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &364432980168242683
 SpriteRenderer:
@@ -143,4 +144,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58b2d139e0f46ca4896da3b4f9c16d22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shopButton: {fileID: 2998788275252780650, guid: 75e687d75fc14ff4ea7a2b8fb90e1618, type: 3}
+--- !u!95 &6192095712960915253
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1131782733630872104}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e4cadd79d34ff9b49be175cf49b08175, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

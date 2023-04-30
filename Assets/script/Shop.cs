@@ -8,16 +8,37 @@ public class Shop : MonoBehaviour
 {
    
 
-    public GameObject ShopCanvas;
-   
+    public GameObject HeroShopCanvas;
+    public GameObject EnemyShopCanvas;
+
+    public TextMeshProUGUI heroCoins;
+    public TextMeshProUGUI enemyCoins;
 
    
-    public void OpenShop()
+    public void OpenHeroShop()
     {
-        ShopCanvas.SetActive(true);
+        HeroShopCanvas.SetActive(true);
     }
-    public void CloseShop()
+    public void CloseHeroShop()
     {
-        ShopCanvas.SetActive(false);
+        HeroShopCanvas.SetActive(false);
+    }
+
+    private void Update()
+    {
+        heroCoins.text = ScoreManager.instance.playerScoreText.text;
+        enemyCoins.text = ScoreManager.instance.enemyScoreText.text;
+    }
+
+
+
+
+    public void OpenEnemyShop()
+    {
+        EnemyShopCanvas.SetActive(true);
+    }
+    public void CloseEnemyShop()
+    {
+        EnemyShopCanvas.SetActive(false);
     }
 }

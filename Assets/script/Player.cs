@@ -27,7 +27,9 @@ public class Player : MonoBehaviour
    public List<GameObject> enemies;
     public GameObject unit;
   
+    
 
+    public Animator animator;
     
 
     private void Awake()
@@ -171,11 +173,34 @@ public class Player : MonoBehaviour
     void MoveHero(int row, int col)
     {
         
-        Vector3 heroPosition = new Vector3(col, row, -1f);
+        Vector3 targetPosition = new Vector3(col, row, -1f);
+        
 
-        unit.transform.position = heroPosition;
+        unit.transform.position = targetPosition;
 
         heroMoved = true;
+    }
+
+    void AnimationControl(Vector3 targetPosition)
+    {
+        if (unit.transform.position.x > targetPosition.x)
+        {
+            animator.SetTrigger("Left");
+        }
+        else if (unit.transform.position.x < targetPosition.x)
+        {
+            animator.SetTrigger("Right");
+        }
+
+        if (unit.transform.position.y > targetPosition.y)
+        {
+            animator.SetTrigger("Down");
+        }
+        else if (unit.transform.position.y < targetPosition.y)
+        {
+            animator.SetTrigger("Up");
+        }
+
     }
 
     public bool HasPowerUp(int row, int col)
