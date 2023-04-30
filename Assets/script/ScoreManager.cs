@@ -10,7 +10,8 @@ public class ScoreManager : MonoBehaviour
     public TextMeshProUGUI playerScoreText;
     public TextMeshProUGUI enemyScoreText;
     public TextMeshProUGUI timerText;
-    public TextMeshProUGUI currentStateText;
+    
+    public GameObject EndGamePanel;
 
 
 
@@ -139,8 +140,12 @@ public class ScoreManager : MonoBehaviour
     void EndGame()
     {
         gameEnded = true;
-        
-        GameManager.Instance.UpdateState(scoreEnemy < scorePlayer ? GameState.VictoryScreen : GameState.LoseScreen);
+        EndGamePanel.SetActive(true);
+
+        if (scoreEnemy == scorePlayer) GameManager.Instance.UpdateState(GameState.DrawScreen);
+        else GameManager.Instance.UpdateState(scoreEnemy < scorePlayer ? GameState.VictoryScreen : GameState.LoseScreen);
+
+
     }
 
 }

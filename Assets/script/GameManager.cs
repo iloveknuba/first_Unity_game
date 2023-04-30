@@ -2,13 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public GameState state;
-   
+    public TextMeshProUGUI currentStateText;
+    public TextMeshProUGUI gameResultText;
+
     public event Action<GameState> OnStateChange;
     void Awake()
     {
@@ -31,8 +34,13 @@ public class GameManager : MonoBehaviour
                 HandleEnemyTurn();
                 break;         
             case GameState.VictoryScreen:
+                HandleVictory();
                 break;
             case GameState.LoseScreen:
+                HandleLose();
+                break;
+            case GameState.DrawScreen:
+                HandleDraw();
                 break;
         }
 
@@ -40,20 +48,34 @@ public class GameManager : MonoBehaviour
         
     }
 
-   
+    private void HandleDraw()
+    {
+        gameResultText.text = "Draw!";
+    }
+
+    private void HandleLose()
+    {
+        gameResultText.text = "You lose!!";
+    }
+
+    private void HandleVictory()
+    {
+        gameResultText.text = "You won!!";
+    }
 
     private  void HandleEnemyTurn()
     {
-        ScoreManager.instance.currentStateText.text = "Enemy Turn";
+        currentStateText.text = "Enemy Turn";
        
     }
 
     private  void HandlePlayerTurn()
     {
 
-        ScoreManager.instance.currentStateText.text = "Your Turn";
+        currentStateText.text = "Your Turn";
 
     }
+    
 }
 
 public enum GameState
@@ -61,5 +83,6 @@ public enum GameState
     PlayerTurn,
     EnemyTurn,
     VictoryScreen,
-    LoseScreen
+    LoseScreen,
+    DrawScreen
 }
