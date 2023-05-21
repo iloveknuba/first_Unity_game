@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
 
-   /* public GameObject heroPrefab;
+    public GameObject heroPrefab;
     public ScoreManager scoreText;
 
     private GameObject[,] powerUps;
@@ -156,5 +156,5 @@ public class Player : MonoBehaviour
 
 
     }
-   */
+   
 }

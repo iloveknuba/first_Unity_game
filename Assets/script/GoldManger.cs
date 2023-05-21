@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GoldManger : MonoBehaviour
 {
-   /* public GameObject powerUpPrefab;
+    public GameObject powerUpPrefab;
     private GameObject[,] powerUps;
    
    
@@ -45,5 +45,5 @@ public class GoldManger : MonoBehaviour
 
     }
 
-    */
+    
 }
